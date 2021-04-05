@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opencart-deployment
+  labels:
+    app: opencart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opencart
+  template:
+    metadata:
+      labels:
+        app: opencart
+    spec:
+      containers:
+      - name: opencart
+        image: hladiuk/opencart
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: opencart
+spec:
+  selector:
+    app: opencart
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30000
+  type: LoadBalancer
